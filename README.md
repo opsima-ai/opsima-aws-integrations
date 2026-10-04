@@ -21,19 +21,16 @@ Organizational Unit of your Organization, governed by the SCP you attach to it. 
 the Lambda function, or transferred from another customer through the Opsima Organization when
 commitments can be reassigned.
 
-- [Permissions and why each one is needed](docs/permissions.md)
-- [Account transfer, step by step](docs/account-transfer.md)
-- [Security controls](docs/security-controls.md)
-- [Verifying and pinning a release](docs/release-verification.md)
-
 ## Releases
 
-Each release is a Git tag (`v11.0.0`) and a GitHub Release carrying the Lambda package and its SHA-256.
-The same package is published to `s3://opsima-public-prod/lambda/handle-opsima-accounts-<version>.zip`,
-a key that is never overwritten. Changes are listed in [CHANGELOG.md](CHANGELOG.md).
+Each release is a Git tag and a GitHub Release. The Terraform modules, CloudFormation templates and SCP
+are used straight from the tag. Only the Lambda function is distributed as a built artefact: its zip and
+SHA-256 are attached to the GitHub Release, and the same zip is copied to
+`s3://opsima-public-prod/lambda/handle-opsima-accounts-<version>.zip`, a key that is never overwritten.
+Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
-You can deploy the released package pinned by its hash, or build the Lambda yourself from the tag and
-deploy your own artefact: both paths are described in [docs/release-verification.md](docs/release-verification.md).
+You can deploy the released package pinned by its hash (`lambda_source_code_hash`), or build the Lambda
+yourself from the tag and deploy your own artefact (`lambda_filename`); see the module and Lambda READMEs.
 
 ## Security
 

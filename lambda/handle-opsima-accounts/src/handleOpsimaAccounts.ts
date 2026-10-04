@@ -32,6 +32,7 @@ type LambdaResponse = {
   body: string;
 };
 
+const LAMBDA_VERSION = "11.0.0";
 const ROLE_NAME = "OpsimaOrganizationAccountAccessRole";
 const OPSIMA_OU_ID = process.env.OPSIMA_OU_ID!;
 const ORGANIZATION_ROOT_ID = process.env.ORGANIZATION_ROOT_ID!;
@@ -324,6 +325,7 @@ export const handler = async (event: any, context: any): Promise<LambdaResponse>
       return ok({
         ok: true,
         action: "HEALTHCHECK",
+        version: LAMBDA_VERSION,
       });
     }
 

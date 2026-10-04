@@ -1,6 +1,8 @@
-# Values provided by Opsima at onboarding. Do not change them.
-external_id          = "00000000-0000-0000-0000-000000000000"
-customer_short_id    = "0123456789"
+# Provided by Opsima
+external_id       = "00000000-0000-0000-0000-000000000000"
+customer_short_id = "0123456789"
+
+# Provided by you, from your Organization
 organization_id      = "o-xxxxxxxxxx"
 organization_root_id = "r-xxxx"
 

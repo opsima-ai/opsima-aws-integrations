@@ -8,7 +8,7 @@ report seriously.
 Email **security@opsima.ai** with a description of the issue, the affected file or version, and, if
 possible, steps to reproduce. Please do not open a public issue for security matters.
 
-We acknowledge reports within 2 business days and keep you informed until the issue is resolved. Fixes
+We acknowledge reports within 24 hours and keep you informed until the issue is resolved. Fixes
 are published as a new tagged release, with the change described in the changelog.
 
 ## Scope

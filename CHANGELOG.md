@@ -1,20 +1,19 @@
 # Changelog
 
 All notable changes to this repository are documented here. The format follows
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow the CloudFormation stack
-version they correspond to.
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
 ## [11.0.0]
 
-First public release. Compared with the previously distributed package (stack version 10):
+First public release. Compared with the previously distributed package:
 
 ### Lambda
 - `INVITE` now performs the whole transfer in one invocation: it assumes the transferred account's Opsima
   role under a restrictive session policy, verifies the account is a member of the Opsima Organization,
   invites it, accepts the invitation on its behalf and moves it into the Opsima OU. No callback to Opsima.
-- The account ID is validated, the root ID comes from the `ORGANIZATION_ROOT_ID` variable (no `ListRoots`),
+- The account ID is validated, the root ID comes from the `ORGANIZATION_ROOT_ID` variable,
   creation is polled for up to 4 minutes and the move is retried with backoff. The `MOVE` action is removed.
 - Runtime `nodejs24.x`, function timeout 300 s, reserved concurrency 1, log group with 365-day retention.
 
