@@ -1,0 +1,62 @@
+name: Release
+
+# Triggered by a version tag (v11.0.0). Builds the Lambda package reproducibly, publishes it as a
+# GitHub Release with its SHA-256, and copies it to the Opsima public bucket under a versioned key
+# that is never overwritten.
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: lambda/handle-opsima-accounts/package-lock.json
+
+      - name: Build package
+        working-directory: lambda/handle-opsima-accounts
+        run: npm run package
+
+      - name: Name artefacts after the tag
+        id: artefacts
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          mkdir -p release
+          cp lambda/handle-opsima-accounts/dist/handle-opsima-accounts.zip "release/handle-opsima-accounts-${VERSION}.zip"
+          ( cd release && sha256sum "handle-opsima-accounts-${VERSION}.zip" > SHA256SUMS )
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          cat release/SHA256SUMS
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/handle-opsima-accounts-${{ steps.artefacts.outputs.version }}.zip
+            release/SHA256SUMS
+          generate_release_notes: true
+
+      - name: Configure AWS credentials
+        if: vars.AWS_PUBLISH_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PUBLISH_ROLE_ARN }}
+          aws-region: eu-west-1
+
+      - name: Copy package to the Opsima public bucket (versioned key, never overwritten)
+        if: vars.AWS_PUBLISH_ROLE_ARN != ''
+        run: |
+          aws s3api put-object \
+            --bucket opsima-public-prod \
+            --key "lambda/handle-opsima-accounts-${{ steps.artefacts.outputs.version }}.zip" \
+            --body "release/handle-opsima-accounts-${{ steps.artefacts.outputs.version }}.zip" \
+            --if-none-match '*'

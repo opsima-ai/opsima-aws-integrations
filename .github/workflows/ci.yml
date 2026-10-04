@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lambda:
+    name: Lambda build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: lambda/handle-opsima-accounts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: lambda/handle-opsima-accounts/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run package
+
+  terraform:
+    name: Terraform ${{ matrix.module }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module: [opsima-remote-access, opsima-remote-access-iam, opsima-savings-estimation]
+    defaults:
+      run:
+        working-directory: terraform/${{ matrix.module }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate
+
+  cloudformation:
+    name: CloudFormation lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install cfn-lint
+      - run: cfn-lint --non-zero-exit-code error cloudformation/*.yaml
+
+  scp:
+    name: SCP syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          for f in scp/*.json; do python3 -m json.tool "$f" > /dev/null && echo "ok $f"; done

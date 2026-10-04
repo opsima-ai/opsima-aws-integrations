@@ -1,0 +1,18 @@
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+crash.log
+
+# Node / Lambda build
+node_modules/
+lambda/**/dist/
+*.zip
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

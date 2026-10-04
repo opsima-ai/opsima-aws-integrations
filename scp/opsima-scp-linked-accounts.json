@@ -1,0 +1,46 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyAllExceptOpsimaOperations",
+      "Effect": "Deny",
+      "Resource": "*",
+      "NotAction": [
+        "savingsplans:DescribeSavingsPlansOfferings",
+        "savingsplans:CreateSavingsPlan",
+        "savingsplans:TagResource",
+        "savingsplans:DescribeSavingsPlans",
+        "savingsplans:ReturnSavingsPlan",
+        "rds:DescribeReservedDBInstancesOfferings",
+        "rds:PurchaseReservedDBInstancesOffering",
+        "rds:AddTagsToResource",
+        "rds:DescribeReservedDBInstances",
+        "elasticache:DescribeReservedCacheNodesOfferings",
+        "elasticache:PurchaseReservedCacheNodesOffering",
+        "elasticache:AddTagsToResource",
+        "elasticache:DescribeReservedCacheNodes",
+        "es:DescribeReservedInstanceOfferings",
+        "es:PurchaseReservedInstanceOffering",
+        "es:DescribeReservedInstances",
+        "redshift:DescribeReservedNodeOfferings",
+        "redshift:PurchaseReservedNodeOffering",
+        "redshift:DescribeReservedNodes",
+        "account:PutContactInformation",
+        "iam:CreateServiceLinkedRole",
+        "organizations:ListHandshakesForAccount",
+        "organizations:AcceptHandshake"
+      ]
+    },
+    {
+      "Sid": "DenyServiceLinkedRoleExceptElastiCache",
+      "Effect": "Deny",
+      "Action": "iam:CreateServiceLinkedRole",
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "iam:AWSServiceName": "elasticache.amazonaws.com"
+        }
+      }
+    }
+  ]
+}

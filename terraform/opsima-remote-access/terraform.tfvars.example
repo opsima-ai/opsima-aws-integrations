@@ -1,0 +1,13 @@
+# Values provided by Opsima at onboarding. Do not change them.
+external_id          = "00000000-0000-0000-0000-000000000000"
+customer_short_id    = "0123456789"
+organization_id      = "o-xxxxxxxxxx"
+organization_root_id = "r-xxxx"
+
+# Optional
+# create_cur_bucket                 = true
+# create_opsima_organizational_unit = true
+# opsima_organizational_unit_id     = ""          # bring your own OU
+# lambda_s3_key                     = "lambda/handle-opsima-accounts-11.0.0.zip"
+# lambda_source_code_hash           = "<base64 sha256 from the release notes>"
+# lambda_filename                   = "./handle-opsima-accounts.zip"   # your own build instead of the released package
