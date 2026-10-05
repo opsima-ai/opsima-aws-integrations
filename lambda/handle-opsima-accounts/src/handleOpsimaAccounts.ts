@@ -47,7 +47,7 @@ type SessionCredentials = {
   sessionToken: string;
 };
 
-const LAMBDA_VERSION = "11.0.0-rc.4";
+const LAMBDA_VERSION = "11.0.0";
 const ROLE_NAME = "OpsimaOrganizationAccountAccessRole";
 const OPSIMA_OU_ID = process.env.OPSIMA_OU_ID!;
 const ORGANIZATION_ROOT_ID = process.env.ORGANIZATION_ROOT_ID!;
