@@ -15,8 +15,9 @@ npm ci --silent
 rm -rf dist
 npx tsc
 
-# Fixed timestamp so the archive does not depend on the build date.
-find dist -type f -name '*.js' -exec touch -t 202001010000.00 {} +
+# Fixed timestamp, set in UTC, so the archive depends neither on the build date nor on the time
+# zone of the machine.
+TZ=UTC find dist -type f -name '*.js' -exec touch -t 202001010000.00 {} +
 
 ARCHIVE="dist/handle-opsima-accounts.zip"
 rm -f "$ARCHIVE"

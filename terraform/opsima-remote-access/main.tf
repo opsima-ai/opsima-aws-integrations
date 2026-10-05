@@ -4,7 +4,7 @@ data "aws_region" "current" {}
 locals {
   account_id  = data.aws_caller_identity.current.account_id
   bucket_name = "opsima-cur-${var.customer_short_id}"
-  create_ou   = var.opsima_organizational_unit_id == "" && var.create_opsima_organizational_unit
+  create_ou   = var.create_opsima_organizational_unit
   ou_id       = local.create_ou ? aws_organizations_organizational_unit.opsima[0].id : var.opsima_organizational_unit_id
 
   lambda_function_name = "HandleOpsimaAccounts"
@@ -121,6 +121,13 @@ resource "aws_organizations_organizational_unit" "opsima" {
   name      = "opsima-${var.customer_short_id}"
   parent_id = var.organization_root_id
   tags      = local.tags
+
+  lifecycle {
+    precondition {
+      condition     = var.opsima_organizational_unit_id == ""
+      error_message = "opsima_organizational_unit_id is set: also set create_opsima_organizational_unit = false to use your own Organizational Unit."
+    }
+  }
 }
 
 resource "aws_iam_role" "handle_opsima_accounts_lambda" {
@@ -161,6 +168,13 @@ resource "aws_cloudwatch_log_group" "handle_opsima_accounts_lambda" {
 resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
   name = "HandleOpsimaAccountsLambdaPolicy"
   role = aws_iam_role.handle_opsima_accounts_lambda.name
+
+  lifecycle {
+    precondition {
+      condition     = var.create_opsima_organizational_unit || var.opsima_organizational_unit_id != ""
+      error_message = "create_opsima_organizational_unit is false: set opsima_organizational_unit_id to the Organizational Unit hosting Opsima accounts."
+    }
+  }
 
   policy = <<EOT
 {
