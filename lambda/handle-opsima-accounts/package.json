@@ -1,6 +1,6 @@
 {
   "name": "handle-opsima-accounts",
-  "version": "11.0.0-rc.1",
+  "version": "11.0.0-rc.2",
   "private": true,
   "description": "Lambda function deployed in the customer's Management Account to create and transfer Opsima dedicated accounts",
   "license": "Apache-2.0",
