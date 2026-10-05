@@ -46,14 +46,19 @@ jobs:
           cat release/SHA256SUMS
 
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            release/handle-opsima-accounts-${{ steps.artefacts.outputs.version }}.zip
-            release/SHA256SUMS
-          generate_release_notes: true
-          # A tag with a suffix (v11.0.0-rc.1) is published as a pre-release.
-          prerelease: ${{ contains(github.ref_name, '-') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PRERELEASE=""
+          case "${GITHUB_REF_NAME}" in *-*) PRERELEASE="--prerelease" ;; esac
+
+          gh release create "${GITHUB_REF_NAME}" \
+            "release/handle-opsima-accounts-${{ steps.artefacts.outputs.version }}.zip" \
+            release/SHA256SUMS \
+            --verify-tag \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes \
+            ${PRERELEASE}
 
       - name: Configure AWS credentials
         if: vars.AWS_PUBLISH_ROLE_ARN != ''
