@@ -101,28 +101,9 @@ variable "create_cur_bucket" {
   default     = true
 }
 
-# Lambda package: released artefact pinned by its hash, or your own build
+# Lambda package
 
 variable "lambda_filename" {
-  description = "Path to a locally built handle-opsima-accounts.zip. When set, the function is deployed from this file and its hash, instead of the Opsima public bucket."
+  description = "Path to handle-opsima-accounts.zip, built from the release tag or downloaded from the GitHub Release. Provided by you."
   type        = string
-  default     = null
-}
-
-variable "lambda_s3_bucket" {
-  description = "Bucket hosting the released Lambda package. Used only when lambda_filename is not set. The bucket must be in the same region as the function."
-  type        = string
-  default     = "opsima-public-prod"
-}
-
-variable "lambda_s3_key" {
-  description = "Key of the released Lambda package in lambda_s3_bucket. Pin it to a versioned key."
-  type        = string
-  default     = "lambda/handle-opsima-accounts.zip"
-}
-
-variable "lambda_source_code_hash" {
-  description = "Base64-encoded SHA-256 of the released Lambda package, as published in the release notes. Used only when lambda_filename is not set. Terraform refuses to deploy a package whose hash differs."
-  type        = string
-  default     = null
 }

@@ -2,9 +2,7 @@
 
 Savings estimation (read-only). Creates OpsimaLimitedAccessRole with Cost Explorer read access only.
 
-Deploy in the Management Account of your Organization. The released Lambda package is hosted in
-`eu-west-1`; deploy in that region or build the package yourself (see the
-[Lambda README](../../lambda/handle-opsima-accounts/README.md)).
+Deploy in the Management Account of your Organization.
 
 ## Usage
 
