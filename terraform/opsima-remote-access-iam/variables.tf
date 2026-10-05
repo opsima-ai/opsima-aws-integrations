@@ -57,7 +57,7 @@ variable "organization_root_id" {
 }
 
 variable "opsima_organizational_unit_id" {
-  description = "ID of an existing Organizational Unit of your Organization to host Opsima accounts. Provided by you; leave empty to let the module create one."
+  description = "ID of an existing Organizational Unit of your Organization to host Opsima accounts. Provided by you, together with create_opsima_organizational_unit = false; leave empty to let the module create one."
   type        = string
   default     = ""
 
@@ -68,7 +68,7 @@ variable "opsima_organizational_unit_id" {
 }
 
 variable "create_opsima_organizational_unit" {
-  description = "Whether to create the Organizational Unit hosting Opsima accounts. Ignored when opsima_organizational_unit_id is set."
+  description = "Whether the module creates the Organizational Unit hosting Opsima accounts. Set it to false when you provide opsima_organizational_unit_id."
   type        = bool
   default     = true
 }

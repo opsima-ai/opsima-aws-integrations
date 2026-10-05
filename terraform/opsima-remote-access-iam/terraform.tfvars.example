@@ -8,5 +8,5 @@ organization_root_id = "r-xxxx"
 
 # Optional
 # create_cur_bucket                 = true
-# create_opsima_organizational_unit = true
-# opsima_organizational_unit_id     = ""          # bring your own OU
+# create_opsima_organizational_unit = false # bring your own OU
+# opsima_organizational_unit_id     = "ou-xxxx-xxxxxxxx"
