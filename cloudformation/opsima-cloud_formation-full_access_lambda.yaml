@@ -251,6 +251,11 @@ Resources:
     Properties:
       FunctionName: HandleOpsimaAccounts
       ReservedConcurrentExecutions: 1
+      LoggingConfig:
+        LogFormat: JSON
+        ApplicationLogLevel: INFO
+        SystemLogLevel: INFO
+        LogGroup: !Ref HandleOpsimaAccountsLambdaLogGroup
       Runtime: nodejs24.x
       Handler: handleOpsimaAccounts.handler
       Role: !GetAtt HandleOpsimaAccountsLambdaExecutionRole.Arn

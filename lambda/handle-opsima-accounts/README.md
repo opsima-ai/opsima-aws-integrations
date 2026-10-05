@@ -13,7 +13,15 @@ actions declared in the Terraform module and the CloudFormation template.
 | `INVITE` | Transfers an account from the Opsima Organization: assumes the account's Opsima role under a restrictive session policy, verifies the account is a member of the Opsima Organization, invites it, accepts the invitation on its behalf, moves it into the Opsima OU. |
 | `HEALTHCHECK` | Returns `ok` and the version of the deployed function, so that Opsima knows which release runs in your account. |
 
-The function never logs its input payload.
+## Logs
+
+The function writes two structured records per invocation: `ACTION_STARTED`, with the action and the
+account it applies to, then `ACTION_SUCCEEDED` or `ACTION_FAILED`, with the response returned to Opsima.
+A failed action carries the step that failed (`details.step`), the identifiers known at that point and
+the name and message of the original error. Records are emitted in JSON (log format set by the template),
+so they can be filtered in CloudWatch Logs, for example `{ $.message.event = "ACTION_FAILED" }`.
+
+The raw input payload and the session credentials are never logged.
 
 ## Environment variables
 
