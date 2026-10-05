@@ -23,6 +23,14 @@ jobs:
           cache: npm
           cache-dependency-path: lambda/handle-opsima-accounts/package-lock.json
 
+      - name: Check that the tag matches the package version
+        run: |
+          PKG_VERSION="$(node -p "require('./lambda/handle-opsima-accounts/package.json').version")"
+          if [ "v${PKG_VERSION}" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match the package version ${PKG_VERSION}" >&2
+            exit 1
+          fi
+
       - name: Build package
         working-directory: lambda/handle-opsima-accounts
         run: npm run package
@@ -44,6 +52,8 @@ jobs:
             release/handle-opsima-accounts-${{ steps.artefacts.outputs.version }}.zip
             release/SHA256SUMS
           generate_release_notes: true
+          # A tag with a suffix (v11.0.0-rc.1) is published as a pre-release.
+          prerelease: ${{ contains(github.ref_name, '-') }}
 
       - name: Configure AWS credentials
         if: vars.AWS_PUBLISH_ROLE_ARN != ''

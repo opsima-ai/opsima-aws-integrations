@@ -1,6 +1,6 @@
 {
   "name": "handle-opsima-accounts",
-  "version": "11.0.0",
+  "version": "11.0.0-rc.1",
   "private": true,
   "description": "Lambda function deployed in the customer's Management Account to create and transfer Opsima dedicated accounts",
   "license": "Apache-2.0",
@@ -11,6 +11,9 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "package": "bash scripts/package.sh"
   },
   "dependencies": {
@@ -18,7 +21,13 @@
     "@aws-sdk/client-sts": "^3.600.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^20.19.27",
-    "typescript": "^5.3.3"
+    "eslint": "^10.12.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "prettier": "^3.9.9",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.71.0"
   }
 }

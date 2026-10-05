@@ -258,6 +258,13 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
 
   reserved_concurrent_executions = 1
 
+  logging_config {
+    log_format            = "JSON"
+    application_log_level = "INFO"
+    system_log_level      = "INFO"
+    log_group             = aws_cloudwatch_log_group.handle_opsima_accounts_lambda.name
+  }
+
   # Deploy either a locally built package (lambda_filename) or the released package from the Opsima bucket.
   filename         = var.lambda_filename
   s3_bucket        = var.lambda_filename == null ? var.lambda_s3_bucket : null
