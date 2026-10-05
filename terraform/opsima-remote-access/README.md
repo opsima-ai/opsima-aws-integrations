@@ -2,9 +2,11 @@
 
 Commitment management (default). Creates OpsimaRemoteAccessRole, the HandleOpsimaAccounts Lambda function and its execution role, the Opsima Organizational Unit and the CUR bucket.
 
-Deploy in the Management Account of your Organization. The released Lambda package is hosted in
-`eu-west-1`; deploy in that region or build the package yourself (see the
-[Lambda README](../../lambda/handle-opsima-accounts/README.md)).
+Deploy in the Management Account of your Organization.
+
+The Lambda function is deployed from a local file passed in `lambda_filename`: build it from the release
+tag, or download it from the GitHub Release, and compare its SHA-256 with the one published in the release
+(see the [Lambda README](../../lambda/handle-opsima-accounts/README.md)).
 
 ## Usage
 
@@ -17,7 +19,8 @@ module "opsima" {
   source = "git::https://github.com/opsima-ai/opsima-aws-integrations.git//terraform/opsima-remote-access?ref=v11.0.0"
 
   # Values provided by Opsima
-  external_id = var.opsima_external_id
+  external_id     = var.opsima_external_id
+  lambda_filename = "${path.module}/handle-opsima-accounts.zip"
   # see variables.tf for the full list
 }
 ```

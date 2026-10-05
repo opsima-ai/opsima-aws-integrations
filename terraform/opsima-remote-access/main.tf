@@ -270,8 +270,6 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
   memory_size   = 256
   tags          = local.tags
 
-  reserved_concurrent_executions = 1
-
   logging_config {
     log_format            = "JSON"
     application_log_level = "INFO"
@@ -279,18 +277,8 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
     log_group             = aws_cloudwatch_log_group.handle_opsima_accounts_lambda.name
   }
 
-  # Deploy either a locally built package (lambda_filename) or the released package from the Opsima bucket.
   filename         = var.lambda_filename
-  s3_bucket        = var.lambda_filename == null ? var.lambda_s3_bucket : null
-  s3_key           = var.lambda_filename == null ? var.lambda_s3_key : null
-  source_code_hash = var.lambda_filename != null ? filebase64sha256(var.lambda_filename) : var.lambda_source_code_hash
-
-  lifecycle {
-    precondition {
-      condition     = var.lambda_filename != null || data.aws_region.current.region == "eu-west-1"
-      error_message = "The released Lambda package is hosted in eu-west-1; deploy in eu-west-1 or set lambda_filename to a locally built package."
-    }
-  }
+  source_code_hash = filebase64sha256(var.lambda_filename)
 
   environment {
     variables = {

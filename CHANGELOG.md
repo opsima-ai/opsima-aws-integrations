@@ -15,7 +15,7 @@ First public release. Compared with the previously distributed package:
   invites it, accepts the invitation on its behalf and moves it into the Opsima OU. No callback to Opsima.
 - The account ID is validated, the root ID comes from the `ORGANIZATION_ROOT_ID` variable,
   creation is polled for up to 4 minutes and the move is retried with backoff. The `MOVE` action is removed.
-- Runtime `nodejs24.x`, function timeout 300 s, reserved concurrency 1, log group with 365-day retention.
+- Runtime `nodejs24.x`, function timeout 300 s, log group with 365-day retention.
 
 ### IAM
 - `OpsimaRemoteAccessRole` no longer holds any Organizations write permission; its trust policy requires
@@ -35,5 +35,5 @@ First public release. Compared with the previously distributed package:
 - Public access block, bucket-owner-enforced ownership, 1130-day expiration, `aws:SourceArn` condition.
 
 ### Terraform
-- Published as modules with `variables.tf`; the Lambda can be deployed from a locally built package with
-  `lambda_filename`, or from the released package pinned with `lambda_source_code_hash`.
+- Published as modules with `variables.tf`; the Lambda is deployed from a local file (`lambda_filename`),
+  built from the tag or downloaded from the GitHub Release.

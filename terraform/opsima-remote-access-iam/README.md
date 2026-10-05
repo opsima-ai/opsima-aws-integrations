@@ -2,9 +2,7 @@
 
 Commitment management, IAM only. Same as opsima-remote-access without the Lambda function: OpsimaRemoteAccessRole holds the account-management permissions itself.
 
-Deploy in the Management Account of your Organization. The released Lambda package is hosted in
-`eu-west-1`; deploy in that region or build the package yourself (see the
-[Lambda README](../../lambda/handle-opsima-accounts/README.md)).
+Deploy in the Management Account of your Organization.
 
 ## Usage
 

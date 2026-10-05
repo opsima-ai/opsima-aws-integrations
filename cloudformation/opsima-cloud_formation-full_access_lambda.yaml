@@ -250,7 +250,6 @@ Resources:
       - HandleOpsimaAccountsLambdaLogGroup
     Properties:
       FunctionName: HandleOpsimaAccounts
-      ReservedConcurrentExecutions: 1
       LoggingConfig:
         LogFormat: JSON
         ApplicationLogLevel: INFO

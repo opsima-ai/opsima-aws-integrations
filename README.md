@@ -25,12 +25,11 @@ commitments can be reassigned.
 
 Each release is a Git tag and a GitHub Release. The Terraform modules, CloudFormation templates and SCP
 are used straight from the tag. Only the Lambda function is distributed as a built artefact: its zip and
-SHA-256 are attached to the GitHub Release, and the same zip is copied to
-`s3://opsima-public-prod/lambda/handle-opsima-accounts-<version>.zip`, a key that is never overwritten.
-Changes are listed in [CHANGELOG.md](CHANGELOG.md).
+SHA-256 are attached to the GitHub Release. Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
-You can deploy the released package pinned by its hash (`lambda_source_code_hash`), or build the Lambda
-yourself from the tag and deploy your own artefact (`lambda_filename`); see the module and Lambda READMEs.
+With Terraform, the function is deployed from a local file (`lambda_filename`): build it from the tag, or
+download it from the GitHub Release, and compare its SHA-256 with the published one; see the module and
+Lambda READMEs. The CloudFormation template loads the package from the Opsima public bucket.
 
 ## Security
 
