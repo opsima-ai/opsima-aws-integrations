@@ -47,7 +47,7 @@ type SessionCredentials = {
   sessionToken: string;
 };
 
-const LAMBDA_VERSION = "11.0.0";
+const LAMBDA_VERSION = "11.0.1-rc.1";
 const ROLE_NAME = "OpsimaOrganizationAccountAccessRole";
 const OPSIMA_OU_ID = process.env.OPSIMA_OU_ID!;
 const ORGANIZATION_ROOT_ID = process.env.ORGANIZATION_ROOT_ID!;
@@ -252,10 +252,15 @@ function getManagementAccountId(context: InvocationContext | undefined): string 
 /**
  * Session policy applied to the role assumed in the invited account. The session can only:
  * - prove which organization the account currently belongs to,
- * - accept an invitation issued by THIS organization.
+ * - accept an invitation issued by THIS organization,
+ * - leave the Opsima Organization only, which AcceptHandshake performs implicitly
+ * - create the Organizations service-linked role of the invited account only
  * Everything else the role could do (AdministratorAccess) is denied for this session.
  */
-function buildAcceptInvitationSessionPolicy(managementAccountId: string): string {
+function buildAcceptInvitationSessionPolicy(
+  accountId: string,
+  managementAccountId: string,
+): string {
   return JSON.stringify({
     Version: "2012-10-17",
     Statement: [
@@ -270,6 +275,24 @@ function buildAcceptInvitationSessionPolicy(managementAccountId: string): string
         Effect: "Allow",
         Action: "organizations:AcceptHandshake",
         Resource: `arn:aws:organizations::${managementAccountId}:handshake/${ORGANIZATION_ID}/invite/*`,
+      },
+      {
+        Sid: "LeaveOpsimaOrganizationOnAccept",
+        Effect: "Allow",
+        Action: "organizations:LeaveOrganization",
+        Resource: "*",
+        Condition: {
+          StringEquals: { "aws:PrincipalOrgID": OPSIMA_ORGANIZATION_ID },
+        },
+      },
+      {
+        Sid: "CreateOrganizationsServiceLinkedRoleOnAccept",
+        Effect: "Allow",
+        Action: "iam:CreateServiceLinkedRole",
+        Resource: `arn:aws:iam::${accountId}:role/aws-service-role/organizations.amazonaws.com/AWSServiceRoleForOrganizations`,
+        Condition: {
+          StringEquals: { "iam:AWSServiceName": "organizations.amazonaws.com" },
+        },
       },
     ],
   });
@@ -289,7 +312,7 @@ async function assumeInvitedAccountRole(
       RoleArn: `arn:aws:iam::${accountId}:role/${ROLE_NAME}`,
       RoleSessionName: "opsima-accept-invitation",
       DurationSeconds: ASSUME_ROLE_DURATION_SECONDS,
-      Policy: buildAcceptInvitationSessionPolicy(managementAccountId),
+      Policy: buildAcceptInvitationSessionPolicy(accountId, managementAccountId),
     }),
   );
 

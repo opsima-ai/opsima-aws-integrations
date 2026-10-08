@@ -5,6 +5,18 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+### Lambda
+- `INVITE`: the session policy used to accept the invitation now also allows
+  `organizations:LeaveOrganization` (restricted to the Opsima Organization with `aws:PrincipalOrgID`) and
+  `iam:CreateServiceLinkedRole` for `organizations.amazonaws.com` on the invited account's
+  `AWSServiceRoleForOrganizations`. AWS checks both permissions inside `AcceptHandshake` when the invited
+  account is already a member of an Organization, even though no `LeaveOrganization` call is made and
+  the service-linked role already exists.
+
+### SCP
+- `opsima-scp-linked-accounts.json`: allows `organizations:LeaveOrganization` and
+  `iam:CreateServiceLinkedRole` for `organizations.amazonaws.com`, for the same reason.
+
 ## [11.0.0]
 
 First public release. Compared with the previously distributed package:
