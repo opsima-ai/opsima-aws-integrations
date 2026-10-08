@@ -28,17 +28,18 @@
         "account:PutContactInformation",
         "iam:CreateServiceLinkedRole",
         "organizations:ListHandshakesForAccount",
-        "organizations:AcceptHandshake"
+        "organizations:AcceptHandshake",
+        "organizations:LeaveOrganization"
       ]
     },
     {
-      "Sid": "DenyServiceLinkedRoleExceptElastiCache",
+      "Sid": "DenyServiceLinkedRoleExceptElastiCacheAndOrganizations",
       "Effect": "Deny",
       "Action": "iam:CreateServiceLinkedRole",
       "Resource": "*",
       "Condition": {
         "StringNotEquals": {
-          "iam:AWSServiceName": "elasticache.amazonaws.com"
+          "iam:AWSServiceName": ["elasticache.amazonaws.com", "organizations.amazonaws.com"]
         }
       }
     }
