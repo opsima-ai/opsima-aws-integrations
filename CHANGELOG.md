@@ -5,6 +5,8 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [11.0.1]
+
 ### Lambda
 - `INVITE`: the session policy used to accept the invitation now also allows
   `organizations:LeaveOrganization` (restricted to the Opsima Organization with `aws:PrincipalOrgID`) and
