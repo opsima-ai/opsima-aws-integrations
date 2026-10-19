@@ -351,14 +351,23 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
         "cur:DescribeReportDefinitions",
         "cur:TagResource",
         "organizations:ListAccounts",
-        "organizations:ListTagsForResource",
+        "organizations:ListTagsForResource"%{if var.opsima_invoice_unit_arn == ""},
         "invoicing:CreateInvoiceUnit",
         "invoicing:GetInvoiceUnit",
         "invoicing:UpdateInvoiceUnit",
-        "invoicing:TagResource"
+        "invoicing:TagResource"%{endif}
       ],
       "Resource": "*"
-    },
+    },%{if var.opsima_invoice_unit_arn != ""}
+    {
+      "Sid": "AllowOpsimaInvoiceUnit",
+      "Effect": "Allow",
+      "Action": [
+        "invoicing:GetInvoiceUnit",
+        "invoicing:UpdateInvoiceUnit"
+      ],
+      "Resource": "${var.opsima_invoice_unit_arn}"
+    },%{endif}
     {
       "Sid": "AllowAssumeRole",
       "Effect": "Allow",
