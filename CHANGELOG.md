@@ -14,9 +14,13 @@ All notable changes to this repository are documented here. The format follows
   no reservation) and `lambda_maximum_retry_attempts` (default 0).
 
 ### SCP
-- `opsima-scp-linked-accounts.json`: `AcceptHandshake` is denied on any handshake not issued by the Opsima
-  Organization, and `ListHandshakesForAccount`, `AcceptHandshake` and `LeaveOrganization` are denied to any
-  principal other than `OpsimaOrganizationAccountAccessRole`. A dedicated account can only leave towards Opsima.
+- `opsima-scp-linked-accounts.json` is renamed `opsima-scp-ou.json`: `AcceptHandshake` is denied on any
+  handshake not issued by the Opsima Organization, and `ListHandshakesForAccount`, `AcceptHandshake` and
+  `LeaveOrganization` are denied to any principal other than `OpsimaOrganizationAccountAccessRole`. A dedicated
+  account can only leave towards Opsima.
+- New `opsima-scp-root.json`, to attach to the root of the Organization: the same restrictions as the OU SCP,
+  applied to `OpsimaOrganizationAccountAccessRole` only (`aws:PrincipalArn`), so that they hold wherever a
+  dedicated account sits, including at the root before it is moved into the Opsima OU.
 
 ## [11.0.1]
 
