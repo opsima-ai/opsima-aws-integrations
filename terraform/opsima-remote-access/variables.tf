@@ -112,9 +112,42 @@ variable "opsima_invoice_unit_arn" {
   }
 }
 
-# Lambda package
+# Lambda package and settings
 
 variable "lambda_filename" {
   description = "Path to handle-opsima-accounts.zip, built from the release tag or downloaded from the GitHub Release. Provided by you."
   type        = string
+}
+
+variable "lambda_timeout" {
+  description = "Function timeout in seconds. CREATE action waits up to 4 minutes for the account, so keep at least 300."
+  type        = number
+  default     = 300
+
+  validation {
+    condition     = var.lambda_timeout >= 300 && var.lambda_timeout <= 900
+    error_message = "lambda_timeout must be between 300 and 900 seconds."
+  }
+}
+
+variable "lambda_reserved_concurrency" {
+  description = "Reserved concurrent executions of the function; -1 reserves nothing. A reservation requires the account's Lambda concurrency quota to exceed the 10 unreserved executions AWS keeps aside."
+  type        = number
+  default     = -1
+
+  validation {
+    condition     = var.lambda_reserved_concurrency == -1 || var.lambda_reserved_concurrency >= 1
+    error_message = "lambda_reserved_concurrency must be -1 (no reservation) or at least 1."
+  }
+}
+
+variable "lambda_maximum_retry_attempts" {
+  description = "Retries Lambda performs when an asynchronous invocation fails or times out."
+  type        = number
+  default     = 0
+
+  validation {
+    condition     = var.lambda_maximum_retry_attempts >= 0 && var.lambda_maximum_retry_attempts <= 2
+    error_message = "lambda_maximum_retry_attempts must be between 0 and 2."
+  }
 }

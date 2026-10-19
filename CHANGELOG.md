@@ -10,6 +10,8 @@ All notable changes to this repository are documented here. The format follows
   When set, `OpsimaRemoteAccessRole` loses `invoicing:CreateInvoiceUnit` and `invoicing:TagResource`,
   and `invoicing:GetInvoiceUnit` / `invoicing:UpdateInvoiceUnit` are limited to that Invoice Unit.
   Left empty (the default), Opsima creates the Invoice Unit at onboarding.
+- `opsima-remote-access`: new inputs `lambda_timeout` (default 300), `lambda_reserved_concurrency` (default -1,
+  no reservation) and `lambda_maximum_retry_attempts` (default 0).
 
 ### SCP
 - `opsima-scp-linked-accounts.json`: `AcceptHandshake` is denied on any handshake not issued by the Opsima

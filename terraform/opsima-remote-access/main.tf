@@ -266,9 +266,11 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
   role          = aws_iam_role.handle_opsima_accounts_lambda.arn
   runtime       = "nodejs24.x"
   handler       = "handleOpsimaAccounts.handler"
-  timeout       = 300
+  timeout       = var.lambda_timeout
   memory_size   = 256
   tags          = local.tags
+
+  reserved_concurrent_executions = var.lambda_reserved_concurrency
 
   logging_config {
     log_format            = "JSON"
@@ -294,6 +296,11 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
     aws_iam_role_policy.handle_opsima_accounts_lambda,
     aws_cloudwatch_log_group.handle_opsima_accounts_lambda,
   ]
+}
+
+resource "aws_lambda_function_event_invoke_config" "handle_opsima_accounts" {
+  function_name          = aws_lambda_function.handle_opsima_accounts.function_name
+  maximum_retry_attempts = var.lambda_maximum_retry_attempts
 }
 
 resource "aws_iam_role" "opsima_remote_access" {
