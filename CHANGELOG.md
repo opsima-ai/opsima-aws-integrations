@@ -11,6 +11,11 @@ All notable changes to this repository are documented here. The format follows
   and `invoicing:GetInvoiceUnit` / `invoicing:UpdateInvoiceUnit` are limited to that Invoice Unit.
   Left empty (the default), Opsima creates the Invoice Unit at onboarding.
 
+### SCP
+- `opsima-scp-linked-accounts.json`: `AcceptHandshake` is denied on any handshake not issued by the Opsima
+  Organization, and `ListHandshakesForAccount`, `AcceptHandshake` and `LeaveOrganization` are denied to any
+  principal other than `OpsimaOrganizationAccountAccessRole`. A dedicated account can only leave towards Opsima.
+
 ## [11.0.1]
 
 ### Lambda

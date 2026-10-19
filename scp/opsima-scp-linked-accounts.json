@@ -33,6 +33,27 @@
       ]
     },
     {
+      "Sid": "DenyAcceptHandshakeExceptFromOpsimaOrganization",
+      "Effect": "Deny",
+      "Action": "organizations:AcceptHandshake",
+      "NotResource": "arn:aws:organizations::730335300397:handshake/o-6wvylp8huu/invite/*"
+    },
+    {
+      "Sid": "DenyExitActionsExceptOpsimaRole",
+      "Effect": "Deny",
+      "Action": [
+        "organizations:ListHandshakesForAccount",
+        "organizations:AcceptHandshake",
+        "organizations:LeaveOrganization"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/OpsimaOrganizationAccountAccessRole"
+        }
+      }
+    },
+    {
       "Sid": "DenyServiceLinkedRoleExceptElastiCacheAndOrganizations",
       "Effect": "Deny",
       "Action": "iam:CreateServiceLinkedRole",
