@@ -199,7 +199,7 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
       "Sid": "AllowOrganizationTagOpsimaAccounts",
       "Effect": "Allow",
       "Action": "organizations:TagResource",
-      "Resource": "*",
+      "Resource": "arn:aws:organizations::${local.account_id}:account/${var.organization_id}/*",
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/owner": "opsima",

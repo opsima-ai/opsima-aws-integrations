@@ -185,7 +185,6 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
         "cur:PutReportDefinition",
         "cur:DescribeReportDefinitions",
         "cur:TagResource",
-        "organizations:TagResource",
         "organizations:ListAccounts",
         "organizations:ListTagsForResource",
         "organizations:DescribeCreateAccountStatus"%{if var.opsima_invoice_unit_arn == ""},
@@ -205,6 +204,21 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
       ],
       "Resource": "${var.opsima_invoice_unit_arn}"
     },%{endif}
+    {
+      "Sid": "AllowOrganizationTagOpsimaAccounts",
+      "Effect": "Allow",
+      "Action": "organizations:TagResource",
+      "Resource": "arn:aws:organizations::${local.account_id}:account/${var.organization_id}/*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/owner": "opsima",
+          "aws:RequestTag/role": "OpsimaOrganizationAccountAccessRole"
+        },
+        "ForAllValues:StringEquals": {
+          "aws:TagKeys": ["owner", "role"]
+        }
+      }
+    },
     {
       "Sid": "AllowOrganizationCreateAccount",
       "Effect": "Allow",
