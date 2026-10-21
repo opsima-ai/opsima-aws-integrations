@@ -11,3 +11,4 @@ organization_root_id = "r-xxxx"
 # create_opsima_organizational_unit = false # bring your own OU
 # opsima_organizational_unit_id     = "ou-xxxx-xxxxxxxx"
 # opsima_invoice_unit_arn           = "arn:aws:invoicing::123456789012:invoice-unit/xxxxxxxx" # bring your own Invoice Unit
+# allow_account_quota_increase      = true # false keeps account quota increases on your side

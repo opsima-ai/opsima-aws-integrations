@@ -12,6 +12,14 @@ All notable changes to this repository are documented here. The format follows
   Left empty (the default), Opsima creates the Invoice Unit at onboarding.
 - `opsima-remote-access`: new inputs `lambda_timeout` (default 300), `lambda_reserved_concurrency` (default -1,
   no reservation) and `lambda_maximum_retry_attempts` (default 0).
+- `opsima-remote-access` and `opsima-remote-access-iam`: new input `allow_account_quota_increase` (default true).
+  Set to false, `OpsimaRemoteAccessRole` loses `servicequotas:RequestServiceQuotaIncrease` and account quota
+  increases stay on the customer's side.
+
+### CloudFormation
+- `opsima-cloud_formation-full_access_lambda.yaml` and `opsima-cloud_formation-full_access.yaml`: new parameter
+  `AllowAccountQuotaIncrease` (default `true`). Set to `false`, `OpsimaRemoteAccessRole` loses
+  `servicequotas:RequestServiceQuotaIncrease` and account quota increases stay on the customer's side.
 
 ### SCP
 - `opsima-scp-linked-accounts.json` is renamed `opsima-scp-ou.json`: `AcceptHandshake` is denied on any

@@ -258,13 +258,13 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
         "arn:aws:s3:::${local.bucket_name}",
         "arn:aws:s3:::${local.bucket_name}/*"
       ]
-    },
+    }%{if var.allow_account_quota_increase},
     {
       "Sid": "AllowOrganizationsAccountQuotaIncrease",
       "Effect": "Allow",
       "Action": "servicequotas:RequestServiceQuotaIncrease",
       "Resource": "arn:aws:servicequotas::${local.account_id}:organizations/L-E619E033"
-    }
+    }%{endif}
   ]
 }
 EOT

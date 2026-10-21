@@ -405,13 +405,13 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
       "Effect": "Allow",
       "Action": "lambda:InvokeFunction",
       "Resource": "${aws_lambda_function.handle_opsima_accounts.arn}"
-    },
+    }%{if var.allow_account_quota_increase},
     {
       "Sid": "AllowOrganizationsAccountQuotaIncrease",
       "Effect": "Allow",
       "Action": "servicequotas:RequestServiceQuotaIncrease",
       "Resource": "arn:aws:servicequotas::${local.account_id}:organizations/L-E619E033"
-    }
+    }%{endif}
   ]
 }
 EOT

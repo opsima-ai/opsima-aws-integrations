@@ -39,6 +39,13 @@ Parameters:
     AllowedValues:
       - 'true'
       - 'false'
+  AllowAccountQuotaIncrease:
+    Type: String
+    Default: 'true'
+    Description: '(DO NOT CHANGE) Grants the Opsima role the right to request an increase of the account quota of your Organization'
+    AllowedValues:
+      - 'true'
+      - 'false'
   CreateOpsimaOrganizationalUnit:
     Type: String
     Default: 'true'
@@ -70,6 +77,7 @@ Parameters:
 
 Conditions:
   ShouldCreateCURBucket: !Equals [ !Ref CreateCURBucket, 'true' ]
+  ShouldAllowAccountQuotaIncrease: !Equals [ !Ref AllowAccountQuotaIncrease, 'true' ]
   ShouldCreateOpsimaOrganizationalUnit: !And
     - !Equals [ !Ref OpsimaOrganizationalUnitId, '' ]
     - !Equals [ !Ref CreateOpsimaOrganizationalUnit, 'true' ]
@@ -351,11 +359,14 @@ Resources:
             Action:
               - lambda:InvokeFunction
             Resource: !GetAtt HandleOpsimaAccountsLambda.Arn
-          - Sid: AllowOrganizationsAccountQuotaIncrease
-            Effect: Allow
-            Action:
-              - servicequotas:RequestServiceQuotaIncrease
-            Resource: !Sub 'arn:aws:servicequotas::${AWS::AccountId}:organizations/L-E619E033'
+          - !If
+            - ShouldAllowAccountQuotaIncrease
+            - Sid: AllowOrganizationsAccountQuotaIncrease
+              Effect: Allow
+              Action:
+                - servicequotas:RequestServiceQuotaIncrease
+              Resource: !Sub 'arn:aws:servicequotas::${AWS::AccountId}:organizations/L-E619E033'
+            - !Ref AWS::NoValue
 
   OpsimaHandshake:
     Type: Custom::OpsimaHandshake

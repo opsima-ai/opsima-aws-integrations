@@ -112,6 +112,12 @@ variable "opsima_invoice_unit_arn" {
   }
 }
 
+variable "allow_account_quota_increase" {
+  description = "Grants the Opsima role the right to request an increase of the account quota of your Organization (servicequotas:RequestServiceQuotaIncrease on quota L-E619E033 only). Set it to false to keep quota increases on your side."
+  type        = bool
+  default     = true
+}
+
 # Lambda package and settings
 
 variable "lambda_filename" {
