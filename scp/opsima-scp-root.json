@@ -2,7 +2,7 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "DenyAllExceptOpsimaOperations",
+      "Sid": "DenyAllExceptOpsimaOperationsForOpsimaRole",
       "Effect": "Deny",
       "Resource": "*",
       "NotAction": [
@@ -30,16 +30,35 @@
         "organizations:ListHandshakesForAccount",
         "organizations:AcceptHandshake",
         "organizations:LeaveOrganization"
-      ]
+      ],
+      "Condition": {
+        "ArnLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/OpsimaOrganizationAccountAccessRole"
+        }
+      }
     },
     {
-      "Sid": "DenyServiceLinkedRoleExceptElastiCacheAndOrganizations",
+      "Sid": "DenyAcceptHandshakeExceptFromOpsimaOrganizationForOpsimaRole",
+      "Effect": "Deny",
+      "Action": "organizations:AcceptHandshake",
+      "NotResource": "arn:aws:organizations::730335300397:handshake/o-6wvylp8huu/invite/*",
+      "Condition": {
+        "ArnLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/OpsimaOrganizationAccountAccessRole"
+        }
+      }
+    },
+    {
+      "Sid": "DenyServiceLinkedRoleExceptElastiCacheAndOrganizationsForOpsimaRole",
       "Effect": "Deny",
       "Action": "iam:CreateServiceLinkedRole",
       "Resource": "*",
       "Condition": {
         "StringNotEquals": {
           "iam:AWSServiceName": ["elasticache.amazonaws.com", "organizations.amazonaws.com"]
+        },
+        "ArnLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/OpsimaOrganizationAccountAccessRole"
         }
       }
     }

@@ -101,9 +101,59 @@ variable "create_cur_bucket" {
   default     = true
 }
 
-# Lambda package
+variable "opsima_invoice_unit_arn" {
+  description = "ARN of an existing Invoice Unit of your Organization dedicated to Opsima accounts. Provided by you; leave empty to let the module create one."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.opsima_invoice_unit_arn == "" || can(regex("^arn:aws:invoicing::[0-9]{12}:invoice-unit/[A-Za-z0-9-]+$", var.opsima_invoice_unit_arn))
+    error_message = "opsima_invoice_unit_arn must be empty or look like arn:aws:invoicing::123456789012:invoice-unit/xxxxxxxx."
+  }
+}
+
+variable "allow_account_quota_increase" {
+  description = "Grants the Opsima role the right to request an increase of the account quota of your Organization (servicequotas:RequestServiceQuotaIncrease on quota L-E619E033 only). Set it to false to keep quota increases on your side."
+  type        = bool
+  default     = true
+}
+
+# Lambda package and settings
 
 variable "lambda_filename" {
   description = "Path to handle-opsima-accounts.zip, built from the release tag or downloaded from the GitHub Release. Provided by you."
   type        = string
+}
+
+variable "lambda_timeout" {
+  description = "Function timeout in seconds. CREATE action waits up to 4 minutes for the account, so keep at least 300."
+  type        = number
+  default     = 300
+
+  validation {
+    condition     = var.lambda_timeout >= 300 && var.lambda_timeout <= 900
+    error_message = "lambda_timeout must be between 300 and 900 seconds."
+  }
+}
+
+variable "lambda_reserved_concurrency" {
+  description = "Reserved concurrent executions of the function; -1 reserves nothing. A reservation requires the account's Lambda concurrency quota to exceed the 10 unreserved executions AWS keeps aside."
+  type        = number
+  default     = -1
+
+  validation {
+    condition     = var.lambda_reserved_concurrency == -1 || var.lambda_reserved_concurrency >= 1
+    error_message = "lambda_reserved_concurrency must be -1 (no reservation) or at least 1."
+  }
+}
+
+variable "lambda_maximum_retry_attempts" {
+  description = "Retries Lambda performs when an asynchronous invocation fails or times out."
+  type        = number
+  default     = 0
+
+  validation {
+    condition     = var.lambda_maximum_retry_attempts >= 0 && var.lambda_maximum_retry_attempts <= 2
+    error_message = "lambda_maximum_retry_attempts must be between 0 and 2."
+  }
 }

@@ -1,0 +1,68 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyAllExceptOpsimaOperations",
+      "Effect": "Deny",
+      "Resource": "*",
+      "NotAction": [
+        "savingsplans:DescribeSavingsPlansOfferings",
+        "savingsplans:CreateSavingsPlan",
+        "savingsplans:TagResource",
+        "savingsplans:DescribeSavingsPlans",
+        "savingsplans:ReturnSavingsPlan",
+        "rds:DescribeReservedDBInstancesOfferings",
+        "rds:PurchaseReservedDBInstancesOffering",
+        "rds:AddTagsToResource",
+        "rds:DescribeReservedDBInstances",
+        "elasticache:DescribeReservedCacheNodesOfferings",
+        "elasticache:PurchaseReservedCacheNodesOffering",
+        "elasticache:AddTagsToResource",
+        "elasticache:DescribeReservedCacheNodes",
+        "es:DescribeReservedInstanceOfferings",
+        "es:PurchaseReservedInstanceOffering",
+        "es:DescribeReservedInstances",
+        "redshift:DescribeReservedNodeOfferings",
+        "redshift:PurchaseReservedNodeOffering",
+        "redshift:DescribeReservedNodes",
+        "account:PutContactInformation",
+        "iam:CreateServiceLinkedRole",
+        "organizations:ListHandshakesForAccount",
+        "organizations:AcceptHandshake",
+        "organizations:LeaveOrganization"
+      ]
+    },
+    {
+      "Sid": "DenyAcceptHandshakeExceptFromOpsimaOrganization",
+      "Effect": "Deny",
+      "Action": "organizations:AcceptHandshake",
+      "NotResource": "arn:aws:organizations::730335300397:handshake/o-6wvylp8huu/invite/*"
+    },
+    {
+      "Sid": "DenyExitActionsExceptOpsimaRole",
+      "Effect": "Deny",
+      "Action": [
+        "organizations:ListHandshakesForAccount",
+        "organizations:AcceptHandshake",
+        "organizations:LeaveOrganization"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/OpsimaOrganizationAccountAccessRole"
+        }
+      }
+    },
+    {
+      "Sid": "DenyServiceLinkedRoleExceptElastiCacheAndOrganizations",
+      "Effect": "Deny",
+      "Action": "iam:CreateServiceLinkedRole",
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "iam:AWSServiceName": ["elasticache.amazonaws.com", "organizations.amazonaws.com"]
+        }
+      }
+    }
+  ]
+}

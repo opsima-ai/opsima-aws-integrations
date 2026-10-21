@@ -188,14 +188,23 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
         "organizations:TagResource",
         "organizations:ListAccounts",
         "organizations:ListTagsForResource",
-        "organizations:DescribeCreateAccountStatus",
+        "organizations:DescribeCreateAccountStatus"%{if var.opsima_invoice_unit_arn == ""},
         "invoicing:CreateInvoiceUnit",
         "invoicing:GetInvoiceUnit",
         "invoicing:UpdateInvoiceUnit",
-        "invoicing:TagResource"
+        "invoicing:TagResource"%{endif}
       ],
       "Resource": "*"
-    },
+    },%{if var.opsima_invoice_unit_arn != ""}
+    {
+      "Sid": "AllowOpsimaInvoiceUnit",
+      "Effect": "Allow",
+      "Action": [
+        "invoicing:GetInvoiceUnit",
+        "invoicing:UpdateInvoiceUnit"
+      ],
+      "Resource": "${var.opsima_invoice_unit_arn}"
+    },%{endif}
     {
       "Sid": "AllowOrganizationCreateAccount",
       "Effect": "Allow",
@@ -249,13 +258,13 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
         "arn:aws:s3:::${local.bucket_name}",
         "arn:aws:s3:::${local.bucket_name}/*"
       ]
-    },
+    }%{if var.allow_account_quota_increase},
     {
       "Sid": "AllowOrganizationsAccountQuotaIncrease",
       "Effect": "Allow",
       "Action": "servicequotas:RequestServiceQuotaIncrease",
       "Resource": "arn:aws:servicequotas::${local.account_id}:organizations/L-E619E033"
-    }
+    }%{endif}
   ]
 }
 EOT

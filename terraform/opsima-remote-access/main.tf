@@ -266,9 +266,11 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
   role          = aws_iam_role.handle_opsima_accounts_lambda.arn
   runtime       = "nodejs24.x"
   handler       = "handleOpsimaAccounts.handler"
-  timeout       = 300
+  timeout       = var.lambda_timeout
   memory_size   = 256
   tags          = local.tags
+
+  reserved_concurrent_executions = var.lambda_reserved_concurrency
 
   logging_config {
     log_format            = "JSON"
@@ -294,6 +296,11 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
     aws_iam_role_policy.handle_opsima_accounts_lambda,
     aws_cloudwatch_log_group.handle_opsima_accounts_lambda,
   ]
+}
+
+resource "aws_lambda_function_event_invoke_config" "handle_opsima_accounts" {
+  function_name          = aws_lambda_function.handle_opsima_accounts.function_name
+  maximum_retry_attempts = var.lambda_maximum_retry_attempts
 }
 
 resource "aws_iam_role" "opsima_remote_access" {
@@ -351,14 +358,23 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
         "cur:DescribeReportDefinitions",
         "cur:TagResource",
         "organizations:ListAccounts",
-        "organizations:ListTagsForResource",
+        "organizations:ListTagsForResource"%{if var.opsima_invoice_unit_arn == ""},
         "invoicing:CreateInvoiceUnit",
         "invoicing:GetInvoiceUnit",
         "invoicing:UpdateInvoiceUnit",
-        "invoicing:TagResource"
+        "invoicing:TagResource"%{endif}
       ],
       "Resource": "*"
-    },
+    },%{if var.opsima_invoice_unit_arn != ""}
+    {
+      "Sid": "AllowOpsimaInvoiceUnit",
+      "Effect": "Allow",
+      "Action": [
+        "invoicing:GetInvoiceUnit",
+        "invoicing:UpdateInvoiceUnit"
+      ],
+      "Resource": "${var.opsima_invoice_unit_arn}"
+    },%{endif}
     {
       "Sid": "AllowAssumeRole",
       "Effect": "Allow",
@@ -389,13 +405,13 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
       "Effect": "Allow",
       "Action": "lambda:InvokeFunction",
       "Resource": "${aws_lambda_function.handle_opsima_accounts.arn}"
-    },
+    }%{if var.allow_account_quota_increase},
     {
       "Sid": "AllowOrganizationsAccountQuotaIncrease",
       "Effect": "Allow",
       "Action": "servicequotas:RequestServiceQuotaIncrease",
       "Resource": "arn:aws:servicequotas::${local.account_id}:organizations/L-E619E033"
-    }
+    }%{endif}
   ]
 }
 EOT

@@ -78,3 +78,20 @@ variable "create_cur_bucket" {
   type        = bool
   default     = true
 }
+
+variable "opsima_invoice_unit_arn" {
+  description = "ARN of an existing Invoice Unit of your Organization dedicated to Opsima accounts. Provided by you; leave empty to let Opsima create it at onboarding."
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.opsima_invoice_unit_arn == "" || can(regex("^arn:aws:invoicing::[0-9]{12}:invoice-unit/[A-Za-z0-9-]+$", var.opsima_invoice_unit_arn))
+    error_message = "opsima_invoice_unit_arn must be empty or look like arn:aws:invoicing::123456789012:invoice-unit/xxxxxxxx."
+  }
+}
+
+variable "allow_account_quota_increase" {
+  description = "Grants the Opsima role the right to request an increase of the account quota of your Organization (servicequotas:RequestServiceQuotaIncrease on quota L-E619E033). Set it to false to keep quota increases on your side."
+  type        = bool
+  default     = true
+}

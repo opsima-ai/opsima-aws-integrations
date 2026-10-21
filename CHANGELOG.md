@@ -5,6 +5,34 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+### Terraform
+- `opsima-remote-access` and `opsima-remote-access-iam`: new optional input `opsima_invoice_unit_arn`.
+  When set, `OpsimaRemoteAccessRole` loses `invoicing:CreateInvoiceUnit` and `invoicing:TagResource`,
+  and `invoicing:GetInvoiceUnit` / `invoicing:UpdateInvoiceUnit` are limited to that Invoice Unit.
+  Left empty (the default), Opsima creates the Invoice Unit at onboarding.
+- `opsima-remote-access`: new inputs `lambda_timeout` (default 300), `lambda_reserved_concurrency` (default -1,
+  no reservation) and `lambda_maximum_retry_attempts` (default 0).
+- `opsima-remote-access` and `opsima-remote-access-iam`: new input `allow_account_quota_increase` (default true).
+  Set to false, `OpsimaRemoteAccessRole` loses `servicequotas:RequestServiceQuotaIncrease` and account quota
+  increases stay on the customer's side.
+
+### Lambda
+- Dependency lockfile refreshed.
+
+### CloudFormation
+- `opsima-cloud_formation-full_access_lambda.yaml` and `opsima-cloud_formation-full_access.yaml`: new parameter
+  `AllowAccountQuotaIncrease` (default `true`). Set to `false`, `OpsimaRemoteAccessRole` loses
+  `servicequotas:RequestServiceQuotaIncrease` and account quota increases stay on the customer's side.
+
+### SCP
+- `opsima-scp-linked-accounts.json` is renamed `opsima-scp-ou.json`: `AcceptHandshake` is denied on any
+  handshake not issued by the Opsima Organization, and `ListHandshakesForAccount`, `AcceptHandshake` and
+  `LeaveOrganization` are denied to any principal other than `OpsimaOrganizationAccountAccessRole`. A dedicated
+  account can only leave towards Opsima.
+- New `opsima-scp-root.json`, to attach to the root of the Organization: the same restrictions as the OU SCP,
+  applied to `OpsimaOrganizationAccountAccessRole` only (`aws:PrincipalArn`), so that they hold wherever a
+  dedicated account sits, including at the root before it is moved into the Opsima OU.
+
 ## [11.0.1]
 
 ### Lambda
