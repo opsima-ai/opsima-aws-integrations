@@ -195,7 +195,7 @@ Resources:
                 Effect: Allow
                 Action:
                   - organizations:TagResource
-                Resource: '*'
+                Resource: !Sub 'arn:aws:organizations::${AWS::AccountId}:account/${OrganizationId}/*'
                 Condition:
                   StringEquals:
                     "aws:RequestTag/owner": "opsima"
