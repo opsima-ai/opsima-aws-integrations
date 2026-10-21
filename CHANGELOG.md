@@ -16,6 +16,9 @@ All notable changes to this repository are documented here. The format follows
   Set to false, `OpsimaRemoteAccessRole` loses `servicequotas:RequestServiceQuotaIncrease` and account quota
   increases stay on the customer's side.
 
+### Lambda
+- Dependency lockfile refreshed.
+
 ### CloudFormation
 - `opsima-cloud_formation-full_access_lambda.yaml` and `opsima-cloud_formation-full_access.yaml`: new parameter
   `AllowAccountQuotaIncrease` (default `true`). Set to `false`, `OpsimaRemoteAccessRole` loses
