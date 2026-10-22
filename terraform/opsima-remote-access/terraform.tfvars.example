@@ -15,6 +15,7 @@ lambda_filename = "./handle-opsima-accounts.zip" # built from the release tag or
 # opsima_organizational_unit_id     = "ou-xxxx-xxxxxxxx" # bring your own OU
 # opsima_invoice_unit_arn           = "arn:aws:invoicing::123456789012:invoice-unit/xxxxxxxx" # bring your own Invoice Unit
 # allow_account_quota_increase      = true # false keeps account quota increases on your side
+# restrict_account_transfers        = false # keep the default unless Opsima asked you to change it
 # lambda_timeout                    = 300 # seconds, 300 to 900
 # lambda_reserved_concurrency       = -1  # -1 = no reservation
 # lambda_maximum_retry_attempts     = 0   # asynchronous invocations only

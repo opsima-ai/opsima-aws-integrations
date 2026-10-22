@@ -221,6 +221,7 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
         }
       }
     },
+%{if !var.restrict_account_transfers}
     {
       "Sid": "AllowOrganizationInviteOpsimaAccount",
       "Effect": "Allow",
@@ -232,6 +233,7 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
         }
       }
     },
+%{endif}
     {
       "Sid": "AllowOrganizationMoveOpsimaAccount",
       "Effect": "Allow",
@@ -251,7 +253,7 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
         "arn:aws:organizations::${local.account_id}:root/*",
         "arn:aws:organizations::${local.account_id}:ou/${var.organization_id}/${local.ou_id}"
       ]
-    },
+    }%{if !var.restrict_account_transfers},
     {
       "Sid": "AllowAssumeOpsimaRoleInInvitedAccounts",
       "Effect": "Allow",
@@ -262,7 +264,7 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
           "aws:ResourceOrgID": "${var.opsima_organization_id}"
         }
       }
-    }
+    }%{endif}
   ]
 }
 EOT
@@ -297,6 +299,7 @@ resource "aws_lambda_function" "handle_opsima_accounts" {
       ORGANIZATION_ROOT_ID         = var.organization_root_id
       OPSIMA_ORGANIZATION_ID       = var.opsima_organization_id
       OPSIMA_MANAGEMENT_ACCOUNT_ID = var.opsima_management_account_id
+      RESTRICT_ACCOUNT_TRANSFERS   = tostring(var.restrict_account_transfers)
     }
   }
 

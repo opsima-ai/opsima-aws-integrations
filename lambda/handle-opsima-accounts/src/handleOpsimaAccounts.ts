@@ -47,13 +47,14 @@ type SessionCredentials = {
   sessionToken: string;
 };
 
-const LAMBDA_VERSION = "11.0.2-rc.3";
+const LAMBDA_VERSION = "11.0.2";
 const ROLE_NAME = "OpsimaOrganizationAccountAccessRole";
 const OPSIMA_OU_ID = process.env.OPSIMA_OU_ID!;
 const ORGANIZATION_ROOT_ID = process.env.ORGANIZATION_ROOT_ID!;
 const OPSIMA_ORGANIZATION_ID = process.env.OPSIMA_ORGANIZATION_ID!;
 const OPSIMA_MANAGEMENT_ACCOUNT_ID = process.env.OPSIMA_MANAGEMENT_ACCOUNT_ID!;
 const ORGANIZATION_ID = process.env.ORGANIZATION_ID!;
+const RESTRICT_ACCOUNT_TRANSFERS = process.env.RESTRICT_ACCOUNT_TRANSFERS === "true";
 const ASSUME_ROLE_DURATION_SECONDS = 900; // STS minimum
 const ACCOUNT_ID_PATTERN = /^[0-9]{12}$/;
 const OPSIMA_ACCOUNT_TAGS = [
@@ -488,12 +489,13 @@ async function handleInvite(
   });
 }
 
-/** HEALTHCHECK: returns the version of the deployed function. */
+/** HEALTHCHECK: returns the version of the deployed function and whether account transfers are restricted. */
 function handleHealthCheck(): ActionResult {
   return ok({
     ok: true,
     action: "HEALTHCHECK",
     version: LAMBDA_VERSION,
+    restrictAccountTransfers: RESTRICT_ACCOUNT_TRANSFERS,
   });
 }
 
@@ -510,6 +512,10 @@ async function dispatch(
     case "CREATE":
       return handleCreate(input);
     case "INVITE":
+      if (RESTRICT_ACCOUNT_TRANSFERS) {
+        return badRequest("INVITE is not enabled on this deployment");
+      }
+
       return handleInvite(input, context);
     case "HEALTHCHECK":
       return handleHealthCheck();
