@@ -199,7 +199,7 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
       "Sid": "AllowOrganizationTagOpsimaAccounts",
       "Effect": "Allow",
       "Action": "organizations:TagResource",
-      "Resource": "arn:aws:organizations::${local.account_id}:account/${var.organization_id}/*",
+      "Resource": "arn:aws:organizations::${local.account_id}:account/*",
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/owner": "opsima",
@@ -211,13 +211,21 @@ resource "aws_iam_role_policy" "handle_opsima_accounts_lambda" {
       }
     },
     {
-      "Sid": "AllowOrganizationCreateInviteAccount",
+      "Sid": "AllowOrganizationCreateAccount",
       "Effect": "Allow",
-      "Action": [
-        "organizations:CreateAccount",
-        "organizations:InviteAccountToOrganization"
-      ],
+      "Action": "organizations:CreateAccount",
       "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/owner": "opsima"
+        }
+      }
+    },
+    {
+      "Sid": "AllowOrganizationInviteOpsimaAccount",
+      "Effect": "Allow",
+      "Action": "organizations:InviteAccountToOrganization",
+      "Resource": "arn:aws:organizations::${var.opsima_management_account_id}:account/${var.opsima_organization_id}/*",
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/owner": "opsima"
