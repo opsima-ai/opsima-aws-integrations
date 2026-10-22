@@ -8,6 +8,8 @@ All notable changes to this repository are documented here. The format follows
 ## [11.0.2]
 
 ### Terraform
+- `opsima-remote-access`: new input `restrict_account_transfers` (default false), passed to the Lambda
+  function as `RESTRICT_ACCOUNT_TRANSFERS`.
 - `opsima-remote-access` and `opsima-remote-access-iam`: new optional input `opsima_invoice_unit_arn`.
   When set, `OpsimaRemoteAccessRole` loses `invoicing:CreateInvoiceUnit` and `invoicing:TagResource`,
   and `invoicing:GetInvoiceUnit` / `invoicing:UpdateInvoiceUnit` are limited to that Invoice Unit.
@@ -22,6 +24,8 @@ All notable changes to this repository are documented here. The format follows
   Organization (`arn:aws:organizations::730335300397:account/o-6wvylp8huu/*`).
 
 ### Lambda
+- `HEALTHCHECK` also returns `restrictAccountTransfers`; `INVITE` is refused with a 400 when
+  `RESTRICT_ACCOUNT_TRANSFERS` is `true`.
 - Dependency lockfile refreshed.
 
 ### CloudFormation

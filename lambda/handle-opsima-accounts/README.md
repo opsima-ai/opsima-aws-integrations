@@ -11,7 +11,7 @@ actions declared in the Terraform module and the CloudFormation template.
 |---|---|
 | `CREATE` | Creates a dedicated account (`ocm+…`) tagged `owner=opsima`, waits for its creation, moves it into the Opsima OU. |
 | `INVITE` | Transfers an account from the Opsima Organization: assumes the account's Opsima role under a restrictive session policy, verifies the account is a member of the Opsima Organization, invites it, accepts the invitation on its behalf, moves it into the Opsima OU. |
-| `HEALTHCHECK` | Returns `ok` and the version of the deployed function, so that Opsima knows which release runs in your account. |
+| `HEALTHCHECK` | Returns `ok`, the version of the deployed function and whether account transfers are restricted, so that Opsima knows which release and which configuration run in your account. |
 
 ## Logs
 
@@ -34,6 +34,7 @@ All of them are set by the Terraform module or the CloudFormation stack.
 | `ORGANIZATION_ROOT_ID` | Root ID of the customer's Organization |
 | `OPSIMA_ORGANIZATION_ID` | ID of the Opsima Organization: transferred accounts must come from it |
 | `OPSIMA_MANAGEMENT_ACCOUNT_ID` | Management Account of the Opsima Organization |
+| `RESTRICT_ACCOUNT_TRANSFERS` | `true` or `false`, from the `restrict_account_transfers` input of the Terraform module. When `true`, `INVITE` is refused with a 400 before any AWS call. |
 
 ## Build
 

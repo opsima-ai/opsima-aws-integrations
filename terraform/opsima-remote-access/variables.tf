@@ -118,6 +118,12 @@ variable "allow_account_quota_increase" {
   default     = true
 }
 
+variable "restrict_account_transfers" {
+  description = "Restricts account transfers to the scope agreed with Opsima for your deployment. Keep the default unless Opsima asked you to change it."
+  type        = bool
+  default     = false
+}
+
 # Lambda package and settings
 
 variable "lambda_filename" {
