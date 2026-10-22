@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 module "opsima" {
-  source = "git::https://github.com/opsima-ai/opsima-aws-integrations.git//terraform/opsima-savings-estimation?ref=v11.0.0"
+  source = "git::https://github.com/opsima-ai/opsima-aws-integrations.git//terraform/opsima-savings-estimation?ref=v11.0.2"
 
   # Values provided by Opsima
   external_id = var.opsima_external_id

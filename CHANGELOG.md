@@ -5,6 +5,8 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [11.0.2]
+
 ### Terraform
 - `opsima-remote-access` and `opsima-remote-access-iam`: new optional input `opsima_invoice_unit_arn`.
   When set, `OpsimaRemoteAccessRole` loses `invoicing:CreateInvoiceUnit` and `invoicing:TagResource`,
