@@ -208,7 +208,7 @@ resource "aws_iam_role_policy" "opsima_remote_access" {
       "Sid": "AllowOrganizationTagOpsimaAccounts",
       "Effect": "Allow",
       "Action": "organizations:TagResource",
-      "Resource": "arn:aws:organizations::${local.account_id}:account/${var.organization_id}/*",
+      "Resource": "arn:aws:organizations::${local.account_id}:account/*",
       "Condition": {
         "StringEquals": {
           "aws:RequestTag/owner": "opsima",

@@ -15,8 +15,9 @@ All notable changes to this repository are documented here. The format follows
 - `opsima-remote-access` and `opsima-remote-access-iam`: new input `allow_account_quota_increase` (default true).
   Set to false, `OpsimaRemoteAccessRole` loses `servicequotas:RequestServiceQuotaIncrease` and account quota
   increases stay on the customer's side.
-- `organizations:TagResource` is limited to the accounts of the customer's Organization
-  (`arn:aws:organizations::<management-account>:account/<organization-id>/*`) instead of `*`.
+- `organizations:TagResource` is limited to accounts (`arn:aws:organizations::<management-account>:account/*`).
+- `opsima-remote-access`: `organizations:InviteAccountToOrganization` is limited to the accounts of the Opsima
+  Organization (`arn:aws:organizations::730335300397:account/o-6wvylp8huu/*`).
 
 ### Lambda
 - Dependency lockfile refreshed.
@@ -25,8 +26,7 @@ All notable changes to this repository are documented here. The format follows
 - `opsima-cloud_formation-full_access_lambda.yaml` and `opsima-cloud_formation-full_access.yaml`: new parameter
   `AllowAccountQuotaIncrease` (default `true`). Set to `false`, `OpsimaRemoteAccessRole` loses
   `servicequotas:RequestServiceQuotaIncrease` and account quota increases stay on the customer's side.
-- `organizations:TagResource` is limited to the accounts of the customer's Organization
-  (`arn:aws:organizations::<management-account>:account/<organization-id>/*`) instead of `*`.
+- `organizations:TagResource` is limited to accounts (`arn:aws:organizations::<management-account>:account/*`).
 
 ### SCP
 - `opsima-scp-linked-accounts.json` is renamed `opsima-scp-ou.json`: `AcceptHandshake` is denied on any
