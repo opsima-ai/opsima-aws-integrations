@@ -285,3 +285,11 @@ Outputs:
     Value: !GetAtt OpsimaRemoteAccessRole.Arn
     Export:
       Name: !Sub "${AWS::StackName}-OpsimaRemoteAccessRoleArn"
+  OpsimaOrganizationalUnitId:
+    Description: 'Organizational Unit ID where Opsima managed accounts are placed'
+    Value: !If
+      - ShouldCreateOpsimaOrganizationalUnit
+      - !GetAtt OpsimaOrganizationalUnit.Id
+      - !Ref OpsimaOrganizationalUnitId
+    Export:
+      Name: !Sub "${AWS::StackName}-OpsimaOrganizationalUnitId"
