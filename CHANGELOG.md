@@ -5,6 +5,14 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+## [11.0.3]
+
+### Terraform
+- new output `opsima_organizational_unit_id`, the Organizational Unit hosting Opsima accounts
+
+### CloudFormation
+- new outputs `opsima_organizational_unit_id` and `HandleOpsimaAccountsLambdaArn`
+
 ## [11.0.2]
 
 ### Terraform
