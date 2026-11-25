@@ -4,6 +4,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       actions:
         patterns: ["*"]
@@ -12,6 +14,8 @@ updates:
     directory: /lambda/handle-opsima-accounts
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 7
     groups:
       npm-minor-patch:
         update-types: ["minor", "patch"]
