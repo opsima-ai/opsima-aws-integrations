@@ -16,7 +16,7 @@ provider "aws" {
 }
 
 module "opsima" {
-  source = "git::https://github.com/opsima-ai/opsima-aws-integrations.git//terraform/opsima-remote-access?ref=v11.0.3"
+  source = "git::https://github.com/opsima-ai/opsima-aws-integrations.git//terraform/opsima-remote-access?ref=v11.1.0"
 
   # Values provided by Opsima
   external_id     = var.opsima_external_id
