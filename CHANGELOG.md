@@ -5,6 +5,10 @@ All notable changes to this repository are documented here. The format follows
 
 ## [Unreleased]
 
+### Terraform
+- new module `opsima-cur-access`: creates `OpsimaCurAccessRole`, a role limited to reading one existing Cost and
+  Usage Report export (`cur_export_name`) and its objects in `cur_bucket_name` under `cur_bucket_prefix`.
+
 ## [11.0.3]
 
 ### Terraform

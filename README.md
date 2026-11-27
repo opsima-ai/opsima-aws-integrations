@@ -11,6 +11,7 @@ and released so that it can be reviewed, built and pinned before deployment.
 | Commitment management (default) | [`terraform/opsima-remote-access`](terraform/opsima-remote-access) | [`opsima-cloud_formation-full_access_lambda.yaml`](cloudformation/opsima-cloud_formation-full_access_lambda.yaml) | `OpsimaRemoteAccessRole`, the `HandleOpsimaAccounts` Lambda function and its execution role, the Opsima OU, the CUR bucket |
 | Commitment management, IAM only | [`terraform/opsima-remote-access-iam`](terraform/opsima-remote-access-iam) | [`opsima-cloud_formation-full_access.yaml`](cloudformation/opsima-cloud_formation-full_access.yaml) | Same without the Lambda function: `OpsimaRemoteAccessRole` holds the account-management permissions itself |
 | Savings estimation (read-only) | [`terraform/opsima-savings-estimation`](terraform/opsima-savings-estimation) | [`opsima-cloud_formation-limited_access.yaml`](cloudformation/opsima-cloud_formation-limited_access.yaml) | `OpsimaLimitedAccessRole` with Cost Explorer read access |
+| Read an existing CUR (read-only) | [`terraform/opsima-cur-access`](terraform/opsima-cur-access) | — | `OpsimaCurAccessRole` with read access to one Data Exports export and its S3 objects |
 
 The service control policy to attach to the Opsima OU is in [`scp/`](scp/).
 
