@@ -1,0 +1,7 @@
+# Provided by Opsima
+external_id = "00000000-0000-0000-0000-000000000000"
+
+# Your existing Cost and Usage Report export
+cur_export_name   = "my-cur2_0"
+cur_bucket_name   = "my-cur-bucket"
+cur_bucket_prefix = "CUR2"
